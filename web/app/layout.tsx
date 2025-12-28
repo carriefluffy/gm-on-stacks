@@ -36,10 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} antialiased selection:bg-brand selection:text-white`}>
-        <div className="noise-overlay"></div>
-        <div className="fixed inset-0 dot-grid pointer-events-none -z-10 opacity-40"></div>
-        <div className="fixed inset-0 bg-gradient-to-b from-[#000000] via-transparent to-[#000000] pointer-events-none -z-10"></div>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} antialiased selection:bg-brand selection:text-white bg-black`}>
+        {/* Visual Layers for the Custom Background */}
+        <div className="noise-overlay pointer-events-none opacity-40"></div>
+        <div className="fixed inset-0 dot-grid pointer-events-none -z-10 opacity-20"></div>
+
+        {/* Soft Vignette and Vignette Bottom */}
+        <div className="fixed inset-0 bg-gradient-to-b from-black/60 via-transparent to-black pointer-events-none -z-10"></div>
 
         <WalletProvider>
           {children}
