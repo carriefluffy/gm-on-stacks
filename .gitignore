@@ -47,7 +47,11 @@ settings/Mainnet.toml
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal tools
 .agent/
+.vercel
+.env*.local
 *-agent.md
 STACKS_ENGINEER.md
 implementation_plan*.md
