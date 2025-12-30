@@ -7,13 +7,18 @@ cache_dir = "./.cache"
 
 [contracts.gm]
 path = "contracts/gm.clar"
-clarity_version = 2
-epoch = 2.5
+clarity_version = 3
+epoch = 3.0
 
 [contracts.sip-009-trait]
 path = "contracts/sip-009-trait.clar"
-clarity_version = 2
-epoch = 2.5
+clarity_version = 3
+epoch = 3.0
+
+[contracts.gm-on-stacks-v3]
+path = "contracts/gm-on-stacks-v2.clar"
+clarity_version = 3
+epoch = 3.0
 
 [repl.analysis]
 passes = ["check_checker"]

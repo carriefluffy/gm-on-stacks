@@ -5,7 +5,7 @@
 ;; - mint-gm-nft: Mint a "GM on Stacks" NFT (1 STX)
 
 ;; Implement SIP-009 NFT trait
-(impl-trait .sip-009-trait.nft-trait)
+(impl-trait 'SP1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7M3CKVJJ.sip-009-trait.nft-trait)
 
 ;; =========================================================================
 ;; CONSTANTS

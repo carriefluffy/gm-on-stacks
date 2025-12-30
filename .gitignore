@@ -47,3 +47,9 @@ settings/Mainnet.toml
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+.agent/
+*-agent.md
+STACKS_ENGINEER.md
+implementation_plan*.md
+task.md
+walkthrough.md

@@ -3,7 +3,8 @@ const {
     broadcastTransaction,
     AnchorMode,
     PostConditionMode,
-    getAddressFromPrivateKey
+    getAddressFromPrivateKey,
+    ClarityVersion
 } = require('@stacks/transactions');
 const { STACKS_TESTNET, STACKS_MAINNET } = require('@stacks/network');
 const { generateWallet } = require('@stacks/wallet-sdk');
@@ -59,7 +60,7 @@ async function deploy() {
 
         const contracts = [
             { name: 'sip-009-trait', path: 'contracts/sip-009-trait.clar' },
-            { name: 'gm', path: 'contracts/gm.clar' }
+            { name: 'gm-on-stacks', path: 'contracts/gm-on-stacks.clar' }
         ];
 
         for (const contract of contracts) {
@@ -76,6 +77,7 @@ async function deploy() {
                 anchorMode: AnchorMode.Any,
                 fee,
                 nonce,
+                clarityVersion: ClarityVersion.Clarity3,
                 postConditionMode: PostConditionMode.Deny,
             };
 
