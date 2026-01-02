@@ -1,5 +1,0 @@
-[network]
-name = "mainnet"
-
-[accounts.deployer]
-mnemonic = "YOUR_24_WORD_MNEMONIC_PHRASE_HERE"

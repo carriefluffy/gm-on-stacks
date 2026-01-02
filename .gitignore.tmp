@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+
+# local development artifacts
+.agent/
+.vercel
+.env*.local
+*-agent.md
+STACKS_ENGINEER.md
+implementation_plan*.md
+task.md
+walkthrough.md

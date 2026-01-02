@@ -9,10 +9,10 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: gm-on-stacks-v4
+            contract-name: gm-on-stacks-mainnet
             expected-sender: SP1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7M3CKVJJ
             cost: 1000000
-            path: contracts/gm-on-stacks-v4.clar
+            path: contracts/gm-on-stacks-mainnet.clar
             anchor-block-only: true
             clarity-version: 3
       epoch: "3.0"

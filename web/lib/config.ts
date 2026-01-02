@@ -1,8 +1,8 @@
 import { STACKS_DEVNET, STACKS_TESTNET, STACKS_MAINNET, StacksNetwork } from "@stacks/network";
 
-// Network selection via env var or default to testnet
+// Network selection via env var or default to mainnet
 type NetworkMode = "devnet" | "testnet" | "mainnet";
-const NETWORK_MODE_RAW = (process.env.NEXT_PUBLIC_NETWORK_MODE || "testnet") as NetworkMode;
+const NETWORK_MODE_RAW = (process.env.NEXT_PUBLIC_NETWORK_MODE || "mainnet") as NetworkMode;
 
 function getStacksNetwork(mode: NetworkMode): StacksNetwork {
     switch (mode) {
@@ -12,7 +12,8 @@ function getStacksNetwork(mode: NetworkMode): StacksNetwork {
     }
 }
 
-function getContractAddress(mode: NetworkMode): string {
+// Returns the deployer principal address (without contract name)
+function getContractDeployer(mode: NetworkMode): string {
     switch (mode) {
         case "mainnet": return "SP1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7M3CKVJJ";
         case "testnet": return "ST1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7MAMP23P";
@@ -20,10 +21,25 @@ function getContractAddress(mode: NetworkMode): string {
     }
 }
 
+// Returns the contract name
+function getContractName(mode: NetworkMode): string {
+    switch (mode) {
+        case "mainnet": return "gm-on-stacks-v6";
+        case "testnet": return "gm-on-stacks-v4";
+        default: return "gm-on-stacks";
+    }
+}
+
 export const NETWORK_MODE = NETWORK_MODE_RAW;
 export const STACKS_NETWORK = getStacksNetwork(NETWORK_MODE_RAW);
-export const CONTRACT_ADDRESS = getContractAddress(NETWORK_MODE_RAW);
-export const CONTRACT_NAME = "gm-on-stacks-v4";
+
+// CONTRACT_ADDRESS is the deployer principal (for API calls)
+export const CONTRACT_ADDRESS = getContractDeployer(NETWORK_MODE_RAW);
+// CONTRACT_NAME is the name of the contract
+export const CONTRACT_NAME = getContractName(NETWORK_MODE_RAW);
+
+// Full contract identifier for reference (address.name)
+export const CONTRACT_IDENTIFIER = `${CONTRACT_ADDRESS}.${CONTRACT_NAME}`;
 
 export const APP_DETAILS = {
     name: "GM on Stacks",

@@ -41,7 +41,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                     }
                 }
             }
-        } catch (e) {
+        } catch {
             // No session
         }
     }, []);

@@ -24,6 +24,7 @@ import {
     NETWORK_MODE
 } from "@/lib/config";
 
+
 // --- Types ---
 interface StreakData {
     currentStreak: number;
@@ -31,15 +32,18 @@ interface StreakData {
     totalGms: number;
 }
 
+
 export default function SayGmBlock() {
     const { isConnected, address, connectWallet } = useWallet();
     const [isGMLoading, setIsGMLoading] = useState(false);
     const [isNFTLoading, setIsNFTLoading] = useState(false);
     const [isActionPending, setIsActionPending] = useState(false);
 
+
     // Success States
     const [lastGmTxId, setLastGmTxId] = useState<string | null>(null);
     const [lastNftTxId, setLastNftTxId] = useState<string | null>(null);
+
 
     const [gmMessage, setGmMessage] = useState("gm");
     const [globalGms, setGlobalGms] = useState<number>(0);
@@ -49,10 +53,18 @@ export default function SayGmBlock() {
         totalGms: 0
     });
 
+
     const network = NETWORK_MODE === "mainnet" ? STACKS_MAINNET : STACKS_TESTNET;
 
+
+    const deployerAddress = CONTRACT_ADDRESS;
+    const isDeployer = address === deployerAddress;
+
     const hasStreakDiscount = streakData.currentStreak >= STREAK_THRESHOLD;
-    const nftPriceDisplay = hasStreakDiscount ? "1 STX" : "33 STX";
+    const nftPriceDisplay = isDeployer
+        ? "Free (Owner)"
+        : (hasStreakDiscount ? "1 STX" : "33 STX");
+
 
     // --- Fetch Global Stats ---
     const fetchGlobalStats = useCallback(async () => {
@@ -80,6 +92,7 @@ export default function SayGmBlock() {
         }
     }, [network]);
 
+
     // --- Fetch User Streak ---
     const fetchUserStreak = useCallback(async () => {
         if (!address) return;
@@ -96,28 +109,39 @@ export default function SayGmBlock() {
                 const data = cvToValue(result, true);
                 console.log("Streak raw data:", data);
 
+
                 let finalData = data;
                 // Clarity returns (ok { ... }) which cvToValue turns into { value: { ... } }
                 if (data && typeof data === 'object' && 'value' in data) {
                     finalData = data.value;
                 }
 
+
                 if (finalData && typeof finalData === 'object') {
                     // Normalize keys and handle different possible formats
                     const getNum = (key: string) => {
-                        const val = (finalData as any)[key];
+                        let val = (finalData as Record<string, unknown>)[key];
                         if (val === undefined || val === null) return 0;
+
+                        // Handle Stacks CV object wrapper (e.g. { type: 'uint', value: '1' })
+                        if (typeof val === 'object' && 'value' in val) {
+                            val = (val as { value: unknown }).value;
+                        }
+
                         // Handle BigInt or String from cvToValue
                         if (typeof val === 'bigint') return Number(val);
                         if (typeof val === 'string') return parseInt(val, 10) || 0;
                         return Number(val);
                     };
 
+
                     const currentStreak = getNum('current-streak') || getNum('currentStreak') || 0;
                     const longestStreak = getNum('longest-streak') || getNum('longestStreak') || 0;
                     const totalGms = getNum('total-gms') || getNum('totalGms') || 0;
 
+
                     console.log("Parsed Streak Data:", { currentStreak, longestStreak, totalGms });
+
 
                     setStreakData({
                         currentStreak,
@@ -131,6 +155,7 @@ export default function SayGmBlock() {
         }
     }, [address, network]);
 
+
     // Initial load
     useEffect(() => {
         fetchGlobalStats();
@@ -139,26 +164,21 @@ export default function SayGmBlock() {
         }
     }, [isConnected, address, fetchGlobalStats, fetchUserStreak]);
 
-    const handleAction = async (type: "gm" | "nft") => {
+
+    // ========== Handle Say GM ==========
+    const handleSayGM = async () => {
         if (isActionPending) return;
         if (!isConnected) {
             connectWallet();
             return;
         }
 
-        const typeIsGm = type === "gm";
-        if (typeIsGm) {
-            setIsGMLoading(true);
-            setLastGmTxId(null);
-        } else {
-            setIsNFTLoading(true);
-            setLastNftTxId(null);
-        }
+        setIsGMLoading(true);
+        setLastGmTxId(null);
         setIsActionPending(true);
 
-        const fee = typeIsGm ? GM_FEE : (hasStreakDiscount ? NFT_FEE_STREAK : NFT_FEE_NORMAL);
-        const functionName = typeIsGm ? "say-gm" : "mint-gm-nft";
-        const loadingId = toast.loading(`Preparing to ${typeIsGm ? 'Say GM' : 'Mint Badge'}...`);
+        const fee = GM_FEE;
+        const loadingId = toast.loading("Preparing to Say GM...");
 
         try {
             const deployerAddress = CONTRACT_ADDRESS.split('.')[0];
@@ -174,22 +194,16 @@ export default function SayGmBlock() {
                 network,
                 contractAddress: CONTRACT_ADDRESS,
                 contractName: CONTRACT_NAME,
-                functionName,
+                functionName: "say-gm",
                 functionArgs: [],
                 postConditionMode: isDeployer ? PostConditionMode.Allow : PostConditionMode.Deny,
                 postConditions,
                 anchorMode: AnchorMode.Any,
                 onFinish: (data) => {
                     toast.dismiss(loadingId);
-                    toast.success(typeIsGm ? "GM Sent! 🚀" : "Badge Minted! 🛡️");
-
-                    if (typeIsGm) {
-                        setIsGMLoading(false);
-                        setLastGmTxId(data.txId);
-                    } else {
-                        setIsNFTLoading(false);
-                        setLastNftTxId(data.txId);
-                    }
+                    toast.success("GM Sent! 🚀");
+                    setIsGMLoading(false);
+                    setLastGmTxId(data.txId);
                     setIsActionPending(false);
 
                     setTimeout(() => {
@@ -200,8 +214,7 @@ export default function SayGmBlock() {
                 onCancel: () => {
                     toast.dismiss(loadingId);
                     toast.error("Cancelled");
-                    if (typeIsGm) setIsGMLoading(false);
-                    else setIsNFTLoading(false);
+                    setIsGMLoading(false);
                     setIsActionPending(false);
                 },
             });
@@ -209,14 +222,82 @@ export default function SayGmBlock() {
             console.error(error);
             toast.dismiss(loadingId);
             toast.error("Something went wrong");
-            if (typeIsGm) setIsGMLoading(false);
-            else setIsNFTLoading(false);
+            setIsGMLoading(false);
             setIsActionPending(false);
         }
     };
 
+
+    // ========== Handle Mint NFT ==========
+    const handleMintNFT = async () => {
+        if (isActionPending) return;
+        if (!isConnected) {
+            connectWallet();
+            return;
+        }
+
+        setIsNFTLoading(true);
+        setLastNftTxId(null);
+        setIsActionPending(true);
+
+        // Compute price based on actual streak
+        const nftFee = hasStreakDiscount ? NFT_FEE_STREAK : NFT_FEE_NORMAL;
+        const loadingId = toast.loading("Preparing to Mint Badge...");
+
+        try {
+            const deployerAddress = CONTRACT_ADDRESS.split('.')[0];
+            const isDeployer = address === deployerAddress;
+
+            // Build post conditions - user will send STX to the contract
+            const postConditions = [];
+            if (!isDeployer) {
+                // Post condition: user sends exactly the NFT fee in microSTX
+                const postCondition = Pc.principal(address!).willSendEq(nftFee).ustx();
+                postConditions.push(postCondition);
+            }
+
+            // Use openContractCall for wallet-signed transactions
+            await openContractCall({
+                network,
+                contractAddress: CONTRACT_ADDRESS,
+                contractName: CONTRACT_NAME,
+                functionName: "mint-gm-nft",
+                functionArgs: [],
+                postConditionMode: isDeployer ? PostConditionMode.Allow : PostConditionMode.Deny,
+                postConditions,
+                anchorMode: AnchorMode.Any,
+                onFinish: (data) => {
+                    toast.dismiss(loadingId);
+                    toast.success("Badge Minting! 🛡️");
+                    setIsNFTLoading(false);
+                    setLastNftTxId(data.txId);
+                    setIsActionPending(false);
+
+                    setTimeout(() => {
+                        fetchGlobalStats();
+                        fetchUserStreak();
+                    }, 2000);
+                },
+                onCancel: () => {
+                    toast.dismiss(loadingId);
+                    toast.error("Cancelled");
+                    setIsNFTLoading(false);
+                    setIsActionPending(false);
+                },
+            });
+        } catch (error) {
+            console.error("Mint error:", error);
+            toast.dismiss(loadingId);
+            toast.error("Mint failed. Check console for details.");
+            setIsNFTLoading(false);
+            setIsActionPending(false);
+        }
+    };
+
+
     return (
         <section className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center p-6 pt-24 pb-40 text-center scale-95 md:scale-100 origin-top">
+
 
             {/* HERO */}
             <div className="mb-20 animate-in fade-in zoom-in duration-1000">
@@ -235,6 +316,7 @@ export default function SayGmBlock() {
                 </p>
             </div>
 
+
             {/* WALLET CONNECTION STATE */}
             {!isConnected ? (
                 <button
@@ -248,6 +330,7 @@ export default function SayGmBlock() {
             ) : (
                 <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-bottom-8 duration-700 fade-in items-stretch text-left">
 
+
                     {/* CARD 1: DASHBOARD */}
                     <div className="glass-card spotlight-card flex flex-col h-full bg-black/40 border-white/5">
                         <div className="flex justify-between items-start mb-8">
@@ -258,6 +341,7 @@ export default function SayGmBlock() {
                                 Profile
                             </span>
                         </div>
+
 
                         <div className="space-y-6 flex-grow">
                             <div className="flex justify-between items-end border-b border-white/5 pb-4">
@@ -270,6 +354,7 @@ export default function SayGmBlock() {
                                 </div>
                             </div>
 
+
                             <div className="flex justify-between items-end border-b border-white/5 pb-4">
                                 <div className="text-left">
                                     <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Current Streak</p>
@@ -280,6 +365,7 @@ export default function SayGmBlock() {
                                 </div>
                             </div>
 
+
                             <div className="flex justify-between items-end">
                                 <div className="text-left">
                                     <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Best Streak</p>
@@ -288,6 +374,7 @@ export default function SayGmBlock() {
                                 <History size={20} className="text-purple-500/50" />
                             </div>
                         </div>
+
 
                         <div className="mt-8 pt-6 border-t border-white/5">
                             <div className="flex items-center justify-between text-[10px] font-mono">
@@ -298,6 +385,7 @@ export default function SayGmBlock() {
                             </div>
                         </div>
                     </div>
+
 
                     {/* CARD 2: SAY GM */}
                     <div className={`glass-card spotlight-card flex flex-col h-full bg-[#1a1225]/40 border-white/5 transition-all duration-500 ${lastGmTxId ? 'border-green-500/40 bg-green-500/5' : ''}`}>
@@ -311,6 +399,7 @@ export default function SayGmBlock() {
                                 <a
                                     href={`https://explorer.hiro.so/txid/${lastGmTxId}?chain=${NETWORK_MODE}`}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     className="px-6 py-2.5 bg-white/5 border border-white/10 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center gap-2 mb-6"
                                 >
                                     View Transaction <Award size={12} />
@@ -328,7 +417,7 @@ export default function SayGmBlock() {
                                     <div className="flex justify-between items-start mb-8">
                                         <h3 className="text-xl font-bold text-white">Say gm</h3>
                                         <span className="px-2 py-0.5 bg-white/5 text-gray-400 text-[10px] font-mono rounded border border-white/10 uppercase tracking-widest">
-                                            Weekly
+                                            Daily
                                         </span>
                                     </div>
                                     <div className="bg-black/40 border border-white/5 rounded-xl p-5 mb-8 focus-within:border-purple-500/30 transition-all">
@@ -342,9 +431,10 @@ export default function SayGmBlock() {
                                     </div>
                                 </div>
 
+
                                 <div>
                                     <button
-                                        onClick={() => handleAction('gm')}
+                                        onClick={handleSayGM}
                                         disabled={isGMLoading || isActionPending}
                                         className="w-full py-4 bg-purple-950/20 hover:bg-purple-900/30 border border-purple-500/20 text-purple-200/80 hover:text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
                                     >
@@ -362,6 +452,7 @@ export default function SayGmBlock() {
                         )}
                     </div>
 
+
                     {/* CARD 3: MINT BADGE */}
                     <div className={`glass-card spotlight-card flex flex-col h-full bg-black/40 border-white/10 transition-all duration-500 ${lastNftTxId ? 'border-orange-500/40 bg-orange-500/5' : ''}`}>
                         {lastNftTxId ? (
@@ -374,6 +465,7 @@ export default function SayGmBlock() {
                                 <a
                                     href={`https://explorer.hiro.so/txid/${lastNftTxId}?chain=${NETWORK_MODE}`}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     className="px-6 py-2.5 bg-white/5 border border-white/10 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center gap-2 mb-6"
                                 >
                                     Check Status <Award size={12} />
@@ -404,9 +496,10 @@ export default function SayGmBlock() {
                                     </div>
                                 </div>
 
+
                                 <div>
                                     <button
-                                        onClick={() => handleAction('nft')}
+                                        onClick={handleMintNFT}
                                         disabled={isNFTLoading || isActionPending}
                                         className="w-full py-4 bg-orange-950/10 border border-orange-500/30 text-orange-500/80 font-bold rounded-xl hover:bg-orange-600/20 hover:text-orange-400 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
@@ -426,15 +519,16 @@ export default function SayGmBlock() {
                 </div>
             )}
 
+
             {/* FOOTER */}
             <div className="fixed bottom-0 left-0 right-0 p-6 flex justify-center gap-8 text-[10px] font-mono text-gray-600 uppercase tracking-widest bg-gradient-to-t from-black to-transparent z-20">
-                <a href="https://github.com/cryptoflops/gm-on-stacks" target="_blank" className="hover:text-white transition-colors flex items-center gap-2">
+                <a href="https://github.com/cryptoflops/gm-on-stacks" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
                     <Github size={12} /> GitHub
                 </a>
-                <a href="https://talent.app/~/ecosystems/stacks" target="_blank" className="hover:text-white transition-colors">
+                <a href="https://talent.app/~/ecosystems/stacks" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                     Talent Protocol
                 </a>
-                <a href="https://stacks.co" target="_blank" className="hover:text-white transition-colors">
+                <a href="https://stacks.co" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                     Stacks
                 </a>
             </div>
