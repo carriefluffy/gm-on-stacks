@@ -11,7 +11,7 @@ import {
     cvToValue,
     principalCV,
 } from "@stacks/transactions";
-import { STACKS_MAINNET, STACKS_TESTNET } from "@stacks/network";
+
 import { Wallet, Loader2, Send, Award, Github, Zap, CheckCircle2, LayoutDashboard, History, Globe } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -91,7 +91,7 @@ export default function SayGmBlock() {
         } catch (error) {
             console.log("Global stats error:", error);
         }
-    }, [network]);
+    }, [network, CONTRACT_ADDRESS, CONTRACT_NAME]);
 
 
     // --- Fetch User Streak ---
@@ -154,7 +154,7 @@ export default function SayGmBlock() {
         } catch (error) {
             console.log("Streak data error:", error);
         }
-    }, [address, network]);
+    }, [address, network, CONTRACT_ADDRESS, CONTRACT_NAME]);
 
 
     // Initial load

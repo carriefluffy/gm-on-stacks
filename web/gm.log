@@ -1,0 +1,21 @@
+
+> web@0.1.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 15.1.9
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.3.30:3001
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1739ms
+ ○ Compiling / ...
+ ✓ Compiled / in 5.7s (5101 modules)
+ HEAD / 200 in 5983ms
+ GET / 200 in 129ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1213ms (2645 modules)
+ GET /favicon.ico 200 in 1300ms
+ GET / 200 in 3480ms
+ GET / 200 in 392ms
+[?25h
