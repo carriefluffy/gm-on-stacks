@@ -4,7 +4,7 @@ import { STACKS_DEVNET, STACKS_TESTNET, STACKS_MAINNET, StacksNetwork } from "@s
 type NetworkMode = "devnet" | "testnet" | "mainnet";
 const NETWORK_MODE_RAW = (process.env.NEXT_PUBLIC_NETWORK_MODE || "mainnet") as NetworkMode;
 
-function getStacksNetwork(mode: NetworkMode): StacksNetwork {
+export function getStacksNetwork(mode: NetworkMode): StacksNetwork {
     switch (mode) {
         case "mainnet": return STACKS_MAINNET;
         case "testnet": return STACKS_TESTNET;
@@ -13,7 +13,7 @@ function getStacksNetwork(mode: NetworkMode): StacksNetwork {
 }
 
 // Returns the deployer principal address (without contract name)
-function getContractDeployer(mode: NetworkMode): string {
+export function getContractDeployer(mode: NetworkMode): string {
     switch (mode) {
         case "mainnet": return "SP1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7M3CKVJJ";
         case "testnet": return "ST1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7MAMP23P";
@@ -21,11 +21,10 @@ function getContractDeployer(mode: NetworkMode): string {
     }
 }
 
-// Returns the contract name
-function getContractName(mode: NetworkMode): string {
+export function getContractName(mode: NetworkMode): string {
     switch (mode) {
         case "mainnet": return "gm-on-stacks-v6";
-        case "testnet": return "gm-on-stacks-v4";
+        case "testnet": return "gm-on-stacks-v6";
         default: return "gm-on-stacks";
     }
 }

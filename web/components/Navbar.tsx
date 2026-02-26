@@ -6,7 +6,7 @@ import { Wallet, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
-    const { isConnected, address, connectWallet, disconnectWallet } = useWallet();
+    const { isConnected, address, networkMode, setNetworkMode, connectWallet, disconnectWallet } = useWallet();
     const [isConnecting, setIsConnecting] = useState(false);
 
     const truncatedAddress = address ? `${address.slice(0, 4)}...${address.slice(-4)}` : "";
@@ -33,7 +33,18 @@ export default function Navbar() {
                 </div>
                 <div className="flex flex-col">
                     <span className="text-lg font-display font-bold text-white leading-none tracking-tight">GM ON STACKS</span>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-1">NETWORK: MAINNET</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-1">
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setNetworkMode(networkMode === "mainnet" ? "testnet" : "mainnet");
+                            }}
+                            className="hover:text-white transition-colors flex items-center gap-1.5"
+                        >
+                            NETWORK: <span className={networkMode === "mainnet" ? "text-amber-500/80" : "text-emerald-500/80"}>{networkMode}</span>
+                            <span className="opacity-40 ml-0.5 mt-[0.5px]">⇄</span>
+                        </button>
+                    </span>
                 </div>
             </Link>
 

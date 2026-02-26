@@ -3,9 +3,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { connect, disconnect as stacksDisconnect, isConnected as checkIsConnected } from "@stacks/connect";
 
+export type NetworkMode = "mainnet" | "testnet";
+
 interface WalletContextType {
     isConnected: boolean;
     address: string | null;
+    networkMode: NetworkMode;
+    setNetworkMode: (mode: NetworkMode) => void;
     connectWallet: () => void;
     disconnectWallet: () => void;
 }
@@ -13,6 +17,8 @@ interface WalletContextType {
 const WalletContext = createContext<WalletContextType>({
     isConnected: false,
     address: null,
+    networkMode: "mainnet",
+    setNetworkMode: () => { },
     connectWallet: () => { },
     disconnectWallet: () => { },
 });
@@ -22,10 +28,22 @@ export function useWallet() {
 }
 
 const STORAGE_KEY = "stacks-session";
+const NETWORK_STORAGE_KEY = "stacks-network-mode";
 
 export function WalletProvider({ children }: { children: ReactNode }) {
     const [address, setAddress] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
+
+    // Initialize networkMode from localStorage or fallback to Env
+    const initialNetwork = (typeof window !== 'undefined' ? localStorage.getItem(NETWORK_STORAGE_KEY) : null) as NetworkMode | null;
+    const defaultNetwork = (process.env.NEXT_PUBLIC_NETWORK_MODE === 'testnet' ? 'testnet' : 'mainnet') as NetworkMode;
+
+    const [networkMode, setNetworkModeState] = useState<NetworkMode>(initialNetwork || defaultNetwork);
+
+    const setNetworkMode = useCallback((mode: NetworkMode) => {
+        setNetworkModeState(mode);
+        localStorage.setItem(NETWORK_STORAGE_KEY, mode);
+    }, []);
 
     // Check for existing session on mount
     useEffect(() => {
@@ -83,7 +101,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <WalletContext.Provider value={{ isConnected, address, connectWallet, disconnectWallet }}>
+        <WalletContext.Provider value={{ isConnected, address, networkMode, setNetworkMode, connectWallet, disconnectWallet }}>
             {children}
         </WalletContext.Provider>
     );

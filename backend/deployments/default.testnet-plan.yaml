@@ -9,24 +9,10 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: gm
+            contract-name: gm-on-stacks-v6
             expected-sender: ST1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7MAMP23P
-            cost: 45750
-            path: contracts/gm.clar
-            anchor-block-only: true
-            clarity-version: 3
-        - contract-publish:
-            contract-name: gm-on-stacks-v3
-            expected-sender: ST1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7MAMP23P
-            cost: 89110
-            path: contracts/gm-on-stacks-v2.clar
-            anchor-block-only: true
-            clarity-version: 3
-        - contract-publish:
-            contract-name: sip-009-trait
-            expected-sender: ST1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7MAMP23P
-            cost: 4440
-            path: contracts/sip-009-trait.clar
+            cost: 52060
+            path: contracts/gm-on-stacks-mainnet.clar
             anchor-block-only: true
             clarity-version: 3
       epoch: "3.0"

@@ -15,13 +15,13 @@ import { STACKS_MAINNET, STACKS_TESTNET } from "@stacks/network";
 import { Wallet, Loader2, Send, Award, Github, Zap, CheckCircle2, LayoutDashboard, History, Globe } from "lucide-react";
 import { toast } from "sonner";
 import {
-    CONTRACT_ADDRESS,
-    CONTRACT_NAME,
+    getContractDeployer,
+    getContractName,
+    getStacksNetwork,
     GM_FEE,
     NFT_FEE_STREAK,
     NFT_FEE_NORMAL,
     STREAK_THRESHOLD,
-    NETWORK_MODE
 } from "@/lib/config";
 
 
@@ -34,7 +34,7 @@ interface StreakData {
 
 
 export default function SayGmBlock() {
-    const { isConnected, address, connectWallet } = useWallet();
+    const { isConnected, address, networkMode, connectWallet } = useWallet();
     const [isGMLoading, setIsGMLoading] = useState(false);
     const [isNFTLoading, setIsNFTLoading] = useState(false);
     const [isActionPending, setIsActionPending] = useState(false);
@@ -54,8 +54,9 @@ export default function SayGmBlock() {
     });
 
 
-    const network = NETWORK_MODE === "mainnet" ? STACKS_MAINNET : STACKS_TESTNET;
-
+    const network = getStacksNetwork(networkMode);
+    const CONTRACT_ADDRESS = getContractDeployer(networkMode);
+    const CONTRACT_NAME = getContractName(networkMode);
 
     const deployerAddress = CONTRACT_ADDRESS;
     const isDeployer = address === deployerAddress;
@@ -397,7 +398,7 @@ export default function SayGmBlock() {
                                 <h3 className="text-2xl font-bold text-white mb-2">GM Sent</h3>
                                 <p className="text-gray-400 text-xs mb-8 leading-relaxed">Broadcast to the Stacks blockchain.</p>
                                 <a
-                                    href={`https://explorer.hiro.so/txid/${lastGmTxId}?chain=${NETWORK_MODE}`}
+                                    href={`https://explorer.hiro.so/txid/${lastGmTxId}?chain=${networkMode}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-6 py-2.5 bg-white/5 border border-white/10 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center gap-2 mb-6"
@@ -463,7 +464,7 @@ export default function SayGmBlock() {
                                 <h3 className="text-2xl font-bold text-white mb-2">Minting Badge</h3>
                                 <p className="text-gray-400 text-xs mb-8 leading-relaxed">Your limited edition GM Badge is on its way.</p>
                                 <a
-                                    href={`https://explorer.hiro.so/txid/${lastNftTxId}?chain=${NETWORK_MODE}`}
+                                    href={`https://explorer.hiro.so/txid/${lastNftTxId}?chain=${networkMode}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="px-6 py-2.5 bg-white/5 border border-white/10 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center gap-2 mb-6"
