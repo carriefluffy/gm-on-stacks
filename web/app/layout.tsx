@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     description: "Say GM to the World. Mint the Badge.",
     images: ["https://cryptologos.cc/logos/stacks-stx-logo.png"],
   },
+  other: {
+    "talentapp:project_verification": "cd806882739b9b654e6dfe7476dd4ddc86b52dfd31ba100c6268d2a53377d6f3f48f29c8f2765dde21aef266f2a7617d308ea83562a23c14b8740ddecfb00628"
+  }
 };
 
 export default function RootLayout({
