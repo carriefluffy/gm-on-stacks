@@ -301,17 +301,19 @@ export default function SayGmBlock() {
 
 
             {/* HERO */}
-            <div className="mb-20 animate-in fade-in zoom-in duration-1000">
-                <h1 className="font-display font-bold text-7xl md:text-9xl tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl flex flex-col items-center gap-2">
-                    <span className="flex items-baseline gap-4">
-                        <span className="text-gradient-animate">GM</span>
-                        <span className="text-white">ON</span>
-                    </span>
-                    <span className="flex items-center gap-4 md:gap-6 text-white">
-                        <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-[0.6em] h-[0.6em] object-contain animate-pulse-slow" />
-                        STACKS
-                    </span>
-                </h1>
+            <div className="mb-20 animate-in fade-in zoom-in duration-1000 flex flex-col items-center">
+                <div className="flex items-center justify-center gap-4 md:gap-8 mb-6 w-full max-w-4xl px-4">
+                    <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-28 h-28 md:w-48 md:h-48 object-contain animate-pulse-slow drop-shadow-2xl shrink-0" />
+                    <h1 className="font-display font-bold text-6xl md:text-9xl tracking-tighter leading-[0.9] drop-shadow-2xl flex flex-col text-left justify-center flex-grow">
+                        <span className="flex items-baseline gap-3 md:gap-4">
+                            <span className="text-gradient-animate">GM</span>
+                            <span className="text-white">ON</span>
+                        </span>
+                        <span className="text-white">
+                            STACKS
+                        </span>
+                    </h1>
+                </div>
                 <p className="text-xl md:text-2xl font-light text-gray-400 tracking-wide">
                     Say GM Onchain
                 </p>
