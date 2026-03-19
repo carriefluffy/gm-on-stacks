@@ -308,7 +308,7 @@ export default function SayGmBlock() {
                         <span className="text-white">ON</span>
                     </span>
                     <span className="flex items-center gap-4 md:gap-6 text-white">
-                        <img src="/assets/stacks-icon.png" alt="Stacks" className="w-[0.6em] h-[0.6em] object-contain invert animate-pulse-slow" />
+                        <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-[0.6em] h-[0.6em] object-contain animate-pulse-slow" />
                         STACKS
                     </span>
                 </h1>

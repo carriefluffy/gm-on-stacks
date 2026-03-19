@@ -29,7 +29,7 @@ export default function Navbar() {
             {/* LEFT: BRANDING */}
             <Link href="/" className="flex items-center gap-3 group opacity-90 hover:opacity-100 transition-opacity">
                 <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center border border-white/10 group-hover:border-white/30 backdrop-blur-md transition-all">
-                    <img src="/assets/stacks-icon.png" alt="Stacks" className="w-5 h-5 object-contain invert" />
+                    <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-5 h-5 object-contain" />
                 </div>
                 <div className="flex flex-col">
                     <span className="text-lg font-display font-bold text-white leading-none tracking-tight">GM ON STACKS</span>

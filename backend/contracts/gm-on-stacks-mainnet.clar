@@ -10,6 +10,7 @@
 (define-constant STREAK_THRESHOLD u21)
 (define-constant BLOCKS_PER_DAY u144)
 (define-constant STREAK_WINDOW u288)
+(define-constant COOLDOWN_PERIOD u144)
 
 (define-constant ERR_NOT_TOKEN_OWNER (err u100))
 (define-constant ERR_NOT_AUTHORIZED (err u101))
@@ -93,9 +94,12 @@
     (let ((blocks-since-last (- stacks-block-height last-block)))
         (if (is-eq last-block u0)
             u1
-            (if (<= blocks-since-last STREAK_WINDOW)
+            (if (and (<= blocks-since-last STREAK_WINDOW) (>= blocks-since-last COOLDOWN_PERIOD))
                 (+ current-streak u1)
-                u1
+                (if (< blocks-since-last COOLDOWN_PERIOD)
+                    current-streak
+                    u1
+                )
             )
         )
     )
@@ -152,7 +156,7 @@
 
 (define-public (transfer (token-id uint) (sender principal) (recipient principal))
     (begin
-        (asserts! (is-eq tx-sender sender) ERR_NOT_TOKEN_OWNER)
+        (asserts! (or (is-eq tx-sender sender) (is-eq contract-caller sender)) ERR_NOT_TOKEN_OWNER)
         (nft-transfer? gm-nft token-id sender recipient)
     )
 )
