@@ -443,7 +443,7 @@ export default function SayGmBlock() {
                                         )}
                                     </button>
                                     <p className="mt-4 text-[10px] text-gray-600 font-mono uppercase tracking-widest text-center">
-                                        Fee 0.1 STX • Onchain
+                                        Onchain
                                     </p>
                                 </div>
                             </>
