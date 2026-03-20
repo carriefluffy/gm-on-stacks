@@ -27,26 +27,26 @@ export default function Navbar() {
     return (
         <nav className="fixed top-0 left-0 right-0 p-6 z-50 flex justify-between items-start">
             {/* LEFT: BRANDING */}
-            <Link href="/" className="flex items-center gap-3 group opacity-90 hover:opacity-100 transition-opacity">
-                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center border border-white/10 group-hover:border-white/30 backdrop-blur-md transition-all">
-                    <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-5 h-5 object-contain" />
-                </div>
-                <div className="flex flex-col">
-                    <span className="text-lg font-display font-bold text-white leading-none tracking-tight">GM ON STACKS</span>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-1">
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setNetworkMode(networkMode === "mainnet" ? "testnet" : "mainnet");
-                            }}
-                            className="hover:text-white transition-colors flex items-center gap-1.5"
-                        >
-                            NETWORK: <span className={networkMode === "mainnet" ? "text-amber-500/80" : "text-emerald-500/80"}>{networkMode}</span>
-                            <span className="opacity-40 ml-0.5 mt-[0.5px]">⇄</span>
-                        </button>
-                    </span>
-                </div>
-            </Link>
+            <div className="flex items-center gap-5 md:gap-6">
+                <img src="/assets/gm-logo.png" alt="App Icon" className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0 relative -top-1 left-1 md:-top-1.5 md:left-1.5" />
+                <Link href="/" className="flex items-center group opacity-90 hover:opacity-100 transition-opacity">
+                    <div className="flex flex-col">
+                        <span className="text-lg font-display font-bold text-white leading-none tracking-tight">GM ON STACKS</span>
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-1">
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setNetworkMode(networkMode === "mainnet" ? "testnet" : "mainnet");
+                                }}
+                                className="hover:text-white transition-colors flex items-center gap-1.5"
+                            >
+                                NETWORK: <span className={networkMode === "mainnet" ? "text-amber-500/80" : "text-emerald-500/80"}>{networkMode}</span>
+                                <span className="opacity-40 ml-0.5 mt-[0.5px]">⇄</span>
+                            </button>
+                        </span>
+                    </div>
+                </Link>
+            </div>
 
             {/* RIGHT: CONNECT WALLET */}
             <button

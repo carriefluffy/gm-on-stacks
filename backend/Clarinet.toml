@@ -5,7 +5,7 @@ authors = []
 telemetry = true
 cache_dir = "./.cache"
 
-[contracts.gm-on-stacks-v6]
+[contracts.gm-on-stacks-v7]
 path = "contracts/gm-on-stacks-mainnet.clar"
 clarity_version = 3
 epoch = 3.0

@@ -73,10 +73,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
             console.log("Wallet response:", response);
 
             if (response && response.addresses && response.addresses.length > 0) {
-                // Find the STX address - STX mainnet starts with SP, testnet with ST
+                // Find the STX address matching the current network
+                // Mainnet addresses start with SP, testnet with ST
                 // BTC addresses start with bc1 which we need to skip
+                const expectedPrefix = networkMode === "mainnet" ? "SP" : "ST";
                 const stxAddress = response.addresses.find(
-                    (addr) => addr.address?.startsWith("SP") || addr.address?.startsWith("ST")
+                    (addr) => addr.address?.startsWith(expectedPrefix)
                 );
 
                 if (stxAddress?.address) {
@@ -85,13 +87,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify({ address: stxAddress.address }));
                     console.log("Connected with STX address:", stxAddress.address);
                 } else {
-                    console.error("No STX address found in wallet response:", response.addresses);
+                    console.error("No STX address found for network", networkMode, "in wallet response:", response.addresses);
                 }
             }
         } catch (error) {
             console.error("Connection error:", error);
         }
-    }, []);
+    }, [networkMode]);
 
     const disconnectWallet = useCallback(() => {
         stacksDisconnect();

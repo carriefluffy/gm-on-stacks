@@ -1,6 +1,6 @@
 ---
-id: 1
-name: Mainnet deployment (Default)
+id: 0
+name: Mainnet deployment
 network: mainnet
 stacks-node: "https://api.hiro.so"
 bitcoin-node: "http://blockstack:blockstacksystem@bitcoin.blockstack.com:8332"
@@ -9,9 +9,9 @@ plan:
     - id: 0
       transactions:
         - contract-publish:
-            contract-name: gm-on-stacks-v6
+            contract-name: gm-on-stacks-v7
             expected-sender: SP1TN1ERKXEM2H9TKKWGPGZVNVNEKS92M7M3CKVJJ
-            cost: 1000000
+            cost: 53690
             path: contracts/gm-on-stacks-mainnet.clar
             anchor-block-only: true
             clarity-version: 3

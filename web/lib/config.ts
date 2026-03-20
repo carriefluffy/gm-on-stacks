@@ -23,8 +23,8 @@ export function getContractDeployer(mode: NetworkMode): string {
 
 export function getContractName(mode: NetworkMode): string {
     switch (mode) {
-        case "mainnet": return "gm-on-stacks-v6";
-        case "testnet": return "gm-on-stacks-v6";
+        case "mainnet": return "gm-on-stacks-v7";
+        case "testnet": return "gm-on-stacks-v7";
         default: return "gm-on-stacks";
     }
 }
@@ -48,8 +48,8 @@ export const APP_DETAILS = {
 // Reown Project ID - Get yours at https://cloud.reown.com
 export const REOWN_PROJECT_ID = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || "demo-project-id";
 
-// GM Fee in microSTX (0.1 STX = 100,000 microSTX)
-export const GM_FEE = 100000;
+// GM Fee in microSTX (now 0 STX)
+export const GM_FEE = 0;
 
 // NFT Fees in microSTX
 export const NFT_FEE_STREAK = 1000000;    // 1 STX (21+ day streak)

@@ -185,20 +185,14 @@ export default function SayGmBlock() {
             const deployerAddress = CONTRACT_ADDRESS.split('.')[0];
             const isDeployer = address === deployerAddress;
 
-            const postConditions = [];
-            if (!isDeployer) {
-                const postCondition = Pc.principal(address!).willSendEq(fee).ustx();
-                postConditions.push(postCondition);
-            }
-
             await openContractCall({
                 network,
                 contractAddress: CONTRACT_ADDRESS,
                 contractName: CONTRACT_NAME,
                 functionName: "say-gm",
                 functionArgs: [],
-                postConditionMode: isDeployer ? PostConditionMode.Allow : PostConditionMode.Deny,
-                postConditions,
+                postConditionMode: PostConditionMode.Allow,
+                postConditions: [],
                 anchorMode: AnchorMode.Any,
                 onFinish: (data) => {
                     toast.dismiss(loadingId);
@@ -302,19 +296,20 @@ export default function SayGmBlock() {
 
             {/* HERO */}
             <div className="mb-20 animate-in fade-in zoom-in duration-1000 flex flex-col items-center">
-                <div className="flex items-center justify-center gap-4 md:gap-8 mb-6 w-full max-w-4xl px-4">
-                    <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-28 h-28 md:w-48 md:h-48 object-contain animate-pulse-slow drop-shadow-2xl shrink-0" />
-                    <h1 className="font-display font-bold text-6xl md:text-9xl tracking-tighter leading-[0.9] drop-shadow-2xl flex flex-col text-left justify-center flex-grow">
+                <div className="flex items-center justify-center gap-2 md:gap-4 mb-6 w-full max-w-4xl mx-auto">
+                    <img src="/assets/gm-logo.png" alt="GM on Stacks" className="w-24 h-24 md:w-36 md:h-36 object-contain drop-shadow-2xl shrink-0 -mr-2 md:-mr-4 relative -top-4 md:-top-8" />
+                    <h1 className="font-display font-bold text-6xl md:text-9xl tracking-tighter leading-[0.9] drop-shadow-2xl flex flex-col text-left justify-center">
                         <span className="flex items-baseline gap-3 md:gap-4">
                             <span className="text-gradient-animate">GM</span>
                             <span className="text-white">ON</span>
                         </span>
-                        <span className="text-white">
+                        <span className="text-white relative -left-4 md:-left-8">
                             STACKS
                         </span>
                     </h1>
                 </div>
-                <p className="text-xl md:text-2xl font-light text-gray-400 tracking-wide">
+                
+                <p className="text-xl md:text-2xl font-light text-gray-400 tracking-wide text-center">
                     Say GM Onchain
                 </p>
             </div>

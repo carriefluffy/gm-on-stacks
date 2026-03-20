@@ -4,7 +4,6 @@
 ;; CONSTANTS
 ;; =========================================================================
 (define-constant CONTRACT_OWNER tx-sender)
-(define-constant GM_FEE u100000)
 (define-constant NFT_FEE_STREAK u1000000)
 (define-constant NFT_FEE_NORMAL u33000000)
 (define-constant STREAK_THRESHOLD u21)
@@ -126,7 +125,6 @@
         (new-streak (calculate-new-streak (get last-gm-block user-data) (get current-streak user-data)))
         (new-longest (if (> new-streak (get longest-streak user-data)) new-streak (get longest-streak user-data)))
     )
-        (try! (pay-fee GM_FEE sender))
         (map-set UserStreak sender {
             current-streak: new-streak,
             last-gm-block: stacks-block-height,
