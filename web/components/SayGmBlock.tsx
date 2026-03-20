@@ -18,7 +18,6 @@ import {
     getContractDeployer,
     getContractName,
     getStacksNetwork,
-    GM_FEE,
     NFT_FEE_STREAK,
     NFT_FEE_NORMAL,
     STREAK_THRESHOLD,
@@ -178,13 +177,9 @@ export default function SayGmBlock() {
         setLastGmTxId(null);
         setIsActionPending(true);
 
-        const fee = GM_FEE;
         const loadingId = toast.loading("Preparing to Say GM...");
 
         try {
-            const deployerAddress = CONTRACT_ADDRESS.split('.')[0];
-            const isDeployer = address === deployerAddress;
-
             await openContractCall({
                 network,
                 contractAddress: CONTRACT_ADDRESS,
