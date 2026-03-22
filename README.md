@@ -9,8 +9,8 @@ Broadcasting good vibes to the Bitcoin L2. A professional, full-cycle Web3 produ
 ## 🚀 Overview
 
 GM on Stacks is a decentralized application that allows users to start their day by broadcasting a "GM" to the Stacks blockchain. It offers two distinct experiences:
-1.  **Native GM:** A low-fee (0.1 STX) transaction to broadcast a message.
-2.  **GM Badge NFT:** A premium (1.0 STX) SIP-009 NFT minting experience with curated IPFS metadata.
+1.  **Native GM:** Only a gas fee in STX to sign transaction and broadcast GM message onchain.
+2.  **GM Badge NFT:** A premium (1.0 STX) SIP-009 NFT minting experience with curated IPFS metadata with a 21+ day streak.
 
 ## 🛠️ Tech Stack
 
