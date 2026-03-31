@@ -1,0 +1,39 @@
+{
+  "name": "gm-on-stacks-sdk",
+  "version": "1.0.1",
+  "description": "Utility SDK for the GM on Stacks social project.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "stacks",
+    "clarity",
+    "gm",
+    "social",
+    "bitcoin"
+  ],
+  "author": "Stacks Builder",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptoflops/gm-on-stacks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cryptoflops/gm-on-stacks/issues"
+  },
+  "homepage": "https://github.com/cryptoflops/gm-on-stacks#readme",
+  "dependencies": {
+    "@stacks/transactions": "^6.15.0",
+    "@stacks/network": "^6.17.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
