@@ -1,0 +1,13 @@
+{
+  "name": "gm-on-stacks-sdk",
+  "version": "1.0.1",
+  "description": "Say GM Onchain - Utility SDK for GM on Stacks",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptoflops/gm-on-stacks.git"
+  },
+  "keywords": ["stacks", "gm", "bitcoin", "social", "sdk"],
+  "author": "cryptoflops",
+  "license": "ISC"
+}
