@@ -32,11 +32,18 @@ export const metadata: Metadata = {
   }
 };
 
+import { authenticate } from '../src/lib/stacks-integration';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Mount Stacks integration helpers
+  if (typeof window !== 'undefined') {
+    console.debug('Stacks SDK environment initialized. Auth method:', authenticate);
+  }
+
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} antialiased selection:bg-brand selection:text-white bg-black`}>

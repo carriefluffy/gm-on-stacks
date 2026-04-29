@@ -11,9 +11,9 @@
   "dependencies": {
     "@stacks/auth": "^7.3.1",
     "@stacks/common": "^7.3.1",
-    "@stacks/connect": "^8.2.5",
+    "@stacks/connect": "^8.2.6",
     "@stacks/network": "^7.3.1",
-    "@stacks/transactions": "^7.3.1",
+    "@stacks/transactions": "^7.4.0",
     "@stacks/wallet-sdk": "^7.2.0",
     "@types/gsap": "^1.20.2",
     "@types/three": "^0.182.0",
