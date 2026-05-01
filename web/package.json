@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hirosystems/chainhooks-client": "^2.1.1",
     "@stacks/auth": "^7.3.1",
     "@stacks/common": "^7.3.1",
     "@stacks/connect": "^8.2.6",
