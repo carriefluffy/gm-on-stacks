@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { Chainhook } from '@hirosystems/chainhooks-client';
 import crypto from 'crypto';
 
 export async function POST(request: Request) {
@@ -7,10 +6,14 @@ export async function POST(request: Request) {
         const body = await request.text();
         const signature = request.headers.get('x-hiro-signature');
         
-        // Parse payload early to determine network
-        const payload: Chainhook = JSON.parse(body);
+        // Parse payload (using any to support both v1 and v2 SDK structures)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const payload: any = JSON.parse(body);
         
-        const secret = payload.network === 'mainnet' 
+        // Hiro v2: payload.event.network | Hiro v1: payload.network
+        const network = payload.event?.network || payload.network || 'mainnet';
+        
+        const secret = network === 'mainnet' 
             ? process.env.HIRO_CHAINHOOK_SECRET_MAINNET 
             : process.env.HIRO_CHAINHOOK_SECRET_TESTNET;
 
@@ -19,18 +22,23 @@ export async function POST(request: Request) {
             const hmac = crypto.createHmac('sha256', secret);
             const digest = hmac.update(body).digest('hex');
             if (signature !== digest) {
-                console.warn(`[Chainhook] Invalid signature detected for ${payload.network}.`);
+                console.warn(`[Chainhook] Invalid signature detected for ${network}.`);
                 return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
             }
         }
 
         // 2. Log event
-        console.log(`[Chainhook] Received event for network: ${payload.network}`);
+        console.log(`[Chainhook] Received event for network: ${network}`);
         
         // 3. Process transactions
-        const transactions = payload.apply?.[0]?.transactions || [];
+        // Hiro v2 structure: payload.event.apply | Hiro v1: payload.apply
+        const applyBlocks = payload.event?.apply || payload.apply || [];
+        const transactions = applyBlocks[0]?.transactions || [];
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         transactions.forEach((tx: any) => {
             const events = tx.metadata?.receipt?.events || [];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             events.forEach((event: any) => {
                 if (event.type === 'SmartContractEvent') {
                     console.log(`[Chainhook] Event: ${event.data.topic} from ${event.data.contract_identifier}`);

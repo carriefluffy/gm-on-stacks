@@ -6,3 +6,4 @@
 - Verified backward compatibility with older Stacks API responses.
 - Testing new layout constraints for edge cases.
 - Looking into potential race conditions during state hydration.
+- Investigated rendering jitter on mobile layout.
