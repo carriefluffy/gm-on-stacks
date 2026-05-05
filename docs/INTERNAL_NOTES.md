@@ -8,3 +8,4 @@
 - Looking into potential race conditions during state hydration.
 - Investigated rendering jitter on mobile layout.
 - Fixed a minor typo in the internal documentation.
+- Verified backward compatibility with older Stacks API responses.
