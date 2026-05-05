@@ -7,3 +7,4 @@
 - Testing new layout constraints for edge cases.
 - Looking into potential race conditions during state hydration.
 - Investigated rendering jitter on mobile layout.
+- Fixed a minor typo in the internal documentation.
