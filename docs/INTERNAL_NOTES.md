@@ -19,3 +19,4 @@
 - Cleaned up some dead code in the utility helpers.
 - Adjusting padding to align with design specs.
 - Verified backward compatibility with older Stacks API responses.
+- Verified backward compatibility with older Stacks API responses.
