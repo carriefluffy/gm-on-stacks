@@ -20,3 +20,4 @@
 - Adjusting padding to align with design specs.
 - Verified backward compatibility with older Stacks API responses.
 - Verified backward compatibility with older Stacks API responses.
+- Pushing work-in-progress state before context switch.
