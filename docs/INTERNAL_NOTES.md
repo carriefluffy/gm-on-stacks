@@ -22,3 +22,4 @@
 - Verified backward compatibility with older Stacks API responses.
 - Pushing work-in-progress state before context switch.
 - Reviewed component tree performance, seems stable.
+- Investigated rendering jitter on mobile layout.
