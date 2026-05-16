@@ -24,3 +24,4 @@
 - Reviewed component tree performance, seems stable.
 - Investigated rendering jitter on mobile layout.
 - Need to look into optimizing the context providers later.
+- Testing new layout constraints for edge cases.
