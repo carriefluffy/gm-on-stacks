@@ -30,3 +30,4 @@
 - Fixed a minor typo in the internal documentation.
 - The Hiro wallet extension detection is synchronous which is nice compared to injected EVM providers.
 - Tested the NFT minting flow on Stacks testnet. Metadata pinning to IPFS is reliable.
+- Reviewed Clarity contract read-only functions. The response parsing handles optional values correctly.
